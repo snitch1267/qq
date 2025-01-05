@@ -7,154 +7,147 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital@0;1&family=Great+Vibes&display=swap');
 
+        :root {
+            --primary-color: #ff1493;
+            --secondary-color: #ff69b4;
+            --background-light: #ffeaf1;
+            --text-color: #444;
+            --transition-smooth: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #ffeaf1 0%, #fff0f3 50%, #ffe6e9 100%);
+            background: linear-gradient(135deg, var(--background-light) 0%, #fff0f3 50%, #ffe6e9 100%);
             font-family: 'Playfair Display', serif;
             margin: 0;
             overflow: hidden;
             position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50C50 77.6142 27.6142 100 0 100C-27.6142 100 -50 77.6142 -50 50C-50 22.3858 -27.6142 0 0 0C27.6142 0 50 22.3858 50 50Z' fill='%23ffffff09'/%3E%3C/svg%3E");
-            opacity: 0.5;
-            pointer-events: none;
+            color: var(--text-color);
         }
 
         .container {
             text-align: center;
             position: relative;
             z-index: 2;
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .photo-frames {
+        .photo-gallery {
             position: fixed;
             width: 100%;
             height: 100%;
             pointer-events: none;
+            perspective: 1000px;
         }
 
         .frame {
             position: absolute;
-            width: 200px;
-            height: 150px;
+            width: 180px;
+            height: 135px;
             background: #fff;
-            border: 12px solid #fff;
+            border: 8px solid #fff;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             padding: 8px;
             transform-origin: center;
             animation: frameFloat 6s ease-in-out infinite;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition-smooth);
             cursor: pointer;
             pointer-events: auto;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
         }
 
         .frame::before {
             content: '';
             position: absolute;
-            top: -16px;
-            left: -16px;
-            right: -16px;
-            bottom: -16px;
+            inset: -10px;
             border: 2px solid rgba(255, 182, 193, 0.3);
             z-index: -1;
+            transform: translateZ(-1px);
         }
 
-        .frame::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.8), transparent);
-            animation: shimmer 2s infinite;
+        .frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-smooth);
+            filter: brightness(1.05) saturate(1.1);
         }
+		
+		.frame.portrait {
+		width: 150px; 
+		height: 190px; 
+		}
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        .heart-container {
+            position: relative;
+            z-index: 10;
+            margin: 2rem 0;
         }
-
-        .frame:nth-child(1) { top: 8%; left: 8%; animation-delay: 0s; transform: rotate(-8deg); }
-        .frame:nth-child(2) { top: 12%; right: 8%; animation-delay: 1.5s; transform: rotate(6deg); }
-        .frame:nth-child(3) { bottom: 12%; left: 12%; animation-delay: 1s; transform: rotate(-5deg); }
-        .frame:nth-child(4) { bottom: 15%; right: 12%; animation-delay: 2s; transform: rotate(7deg); }
 
         .heart {
             font-size: 140px;
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition-smooth);
             animation: heartbeat 2s ease-in-out infinite;
-            text-shadow: 0 8px 16px rgba(255, 105, 180, 0.3);
-            position: relative;
-            z-index: 10;
-            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .heart:hover {
-            transform: scale(1.3) rotate(5deg);
-            animation: none;
+            filter: drop-shadow(0 8px 16px rgba(255, 105, 180, 0.3));
         }
 
         .love-letter {
-            display: none;
+            background: linear-gradient(145deg, #fff, #fff9f9);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 90%;
+            max-width: 600px;
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            background: linear-gradient(to bottom right, #fff, #fff9f9);
-            border: none;
-            border-radius: 20px;
-            padding: 40px;
-            width: 85%;
-            max-width: 450px;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-smooth);
             box-shadow: 
                 0 20px 40px rgba(255, 105, 180, 0.15),
-                0 0 0 1px rgba(255, 182, 193, 0.2);
-            opacity: 0;
-            z-index: 100;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                0 0 0 1px rgba(255, 182, 193, 0.2),
+                0 0 100px rgba(255, 105, 180, 0.1);
         }
 
         .love-letter.active {
             opacity: 1;
+            visibility: visible;
             transform: translate(-50%, -50%) scale(1);
         }
 
         .love-letter h2 {
             font-family: 'Great Vibes', cursive;
-            color: #ff1493;
-            font-size: 2.5em;
-            margin-bottom: 30px;
+            color: var(--primary-color);
+            font-size: 3em;
+            margin-bottom: 1.5rem;
             text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
         }
 
         .love-letter p {
             font-size: 1.2em;
             line-height: 1.8;
-            color: #666;
-            margin-bottom: 25px;
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
             opacity: 0;
             transform: translateY(20px);
-            transition: all 0.5s ease;
+            transition: var(--transition-smooth);
         }
 
         .love-letter.active p {
@@ -162,38 +155,25 @@
             transform: translateY(0);
         }
 
-        .love-letter p:nth-child(2) {
-            transition-delay: 0.1s;
-        }
-
         .signature {
             font-family: 'Great Vibes', cursive;
-            font-size: 1.8em;
-            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            font-size: 2em;
+            margin-top: 2rem;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-top: 40px;
-            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease 0.2s;
-        }
-
-        .love-letter.active .signature {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .close-button {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 1rem;
+            right: 1rem;
             background: none;
             border: none;
-            font-size: 28px;
-            color: #ff69b4;
+            font-size: 2rem;
+            color: var(--primary-color);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition-smooth);
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -202,94 +182,78 @@
             justify-content: center;
         }
 
-        .close-button:hover {
-            background: rgba(255, 105, 180, 0.1);
-            transform: rotate(90deg);
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
-        .frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.95;
-            transition: all 0.5s ease;
-            filter: brightness(1.05) contrast(0.95);
+        @keyframes frameFloat {
+            0%, 100% { transform: translateY(0) rotate(var(--rotation)) translateZ(0); }
+            50% { transform: translateY(-20px) rotate(var(--rotation)) translateZ(20px); }
         }
 
-        .frame:hover {
-            transform: scale(1.05) rotate(0deg) !important;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-            z-index: 20;
-        }
+        @media (max-width: 768px) {
+            .frame {
+                width: 140px;
+                height: 105px;
+                border-width: 6px;
+            }
 
-        .frame:hover img {
-            opacity: 1;
-            filter: brightness(1.1) contrast(1);
-        }
+            .heart {
+                font-size: 100px;
+            }
 
-        .frame.expanded {
-            position: fixed;
-            top: 50% !important;
-            left: 50% !important;
-            transform: translate(-50%, -50%) scale(2) !important;
-            z-index: 1000;
-            animation: none;
+            .love-letter {
+                padding: 2rem;
+            }
+
+            .love-letter h2 {
+                font-size: 2.5em;
+            }
         }
 
         .overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background: rgba(0, 0, 0, 0.8);
             opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 999;
+            visibility: hidden;
+            transition: var(--transition-smooth);
+            backdrop-filter: blur(8px);
         }
 
         .overlay.active {
             opacity: 1;
-            pointer-events: auto;
-        }
-
-        @keyframes frameFloat {
-            0%, 100% { 
-                transform: translateY(0) rotate(var(--rotation));
-            }
-            50% { 
-                transform: translateY(-20px) rotate(var(--rotation));
-            }
-        }
-
-        @keyframes frameSpin {
-            from { transform: rotate(0deg) scale(0.5); }
-            to { transform: rotate(360deg) scale(1); }
+            visibility: visible;
         }
     </style>
 </head>
 <body>
     <div class="overlay" id="overlay"></div>
-    <div class="photo-frames">
-        <div class="frame">
-            <img src="assets\1.jpg" alt="1" />
-        </div>
-        <div class="frame">
-            <img src="assets\2.jpg" alt="2" />
-        </div>
-        <div class="frame">
-            <img src="assets\3.jpg" alt="3" />
-        </div>
-        <div class="frame">
-            <img src="assets\4.jpg" alt="4" />
-        </div>
+    
+    <div class="photo-gallery">
+    <div class="frame" style="--rotation: -8deg">
+        <img src="assets/1.jpg" alt="1" />
     </div>
+    <div class="frame portrait" style="--rotation: 6deg">
+        <img src="assets/2.jpg" alt="2" />
+    </div>
+    <div class="frame portrait" style="--rotation: -5deg">
+        <img src="assets/3.jpg" alt="3" />
+    </div>
+    <div class="frame" style="--rotation: 7deg">
+        <img src="assets/4.jpg" alt="4" />
+    </div>
+</div>
+
     <div class="container">
-        <div class="heart" id="heart">❤️</div>
+        <div class="heart-container">
+            <div class="heart" id="heart">❤️</div>
+        </div>
+        
         <div class="love-letter" id="loveLetter">
-            <button class="close-button" id="closeButton">×</button>
-            <h2>My Sheshee,</h2>
+            <button class="close-button" id="closeButton" aria-label="Close letter">×</button>
+            <h2>My Dearest Love,</h2>
             <p>
                 From the moment our paths crossed, my heart has known only one truth: it beats in perfect harmony with yours. Your presence in my life is like the first light of dawn breaking through darkness, bringing warmth and color to my world.
             </p>
@@ -304,62 +268,103 @@
     </div>
 
     <script>
-        document.getElementById('heart').addEventListener('click', function() {
-            const loveLetter = document.getElementById('loveLetter');
-            loveLetter.style.display = 'block';
-            requestAnimationFrame(() => {
-                loveLetter.classList.add('active');
+       document.addEventListener('DOMContentLoaded', () => {
+    const heart = document.getElementById('heart');
+    const loveLetter = document.getElementById('loveLetter');
+    const closeButton = document.getElementById('closeButton');
+    const overlay = document.getElementById('overlay');
+    const frames = document.querySelectorAll('.frame');
+
+    // Improved frame positioning
+    const positionFrames = () => {
+        const positions = [
+            { top: '10%', left: '10%' },
+            { top: '15%', right: '10%' },
+            { bottom: '15%', left: '12%' },
+            { bottom: '20%', right: '12%' }
+        ];
+
+        frames.forEach((frame, index) => {
+            Object.entries(positions[index]).forEach(([key, value]) => {
+                frame.style[key] = value;
             });
         });
+    };
 
-        document.getElementById('closeButton').addEventListener('click', function() {
-            const loveLetter = document.getElementById('loveLetter');
-            loveLetter.classList.remove('active');
-            setTimeout(() => {
-                loveLetter.style.display = 'none';
-            }, 500);
-        });
+    positionFrames();
+    window.addEventListener('resize', positionFrames);
 
-        document.addEventListener('mousemove', function(e) {
-            const frames = document.querySelectorAll('.frame:not(.expanded)');
-            const moveX = (e.clientX - window.innerWidth / 2) / 40;
-            const moveY = (e.clientY - window.innerHeight / 2) / 40;
+    // Enhanced parallax effect
+    const handleMouseMove = (e) => {
+        const { clientX, clientY } = e.type.includes('touch') ? e.touches[0] : e;
+        const moveX = (clientX - window.innerWidth / 2) / 50;
+        const moveY = (clientY - window.innerHeight / 2) / 50;
 
+        requestAnimationFrame(() => {
             frames.forEach((frame, index) => {
-                const delay = index * 0.1;
-                frame.style.transition = 'transform 0.3s ease';
-                frame.style.transform = `translate(${moveX}px, ${moveY}px) rotate(${frame.dataset.rotation || '0deg'})`;
+                const depth = 1 + index * 0.2;
+                frame.style.transform = `
+                    translate3d(${moveX * depth}px, ${moveY * depth}px, 0)
+                    rotate(var(--rotation))
+                `;
             });
         });
+    };
 
-        // Initialize frame rotations and add click handlers
-        document.querySelectorAll('.frame').forEach((frame, index) => {
-            const rotations = [-8, 6, -5, 7];
-            frame.style.setProperty('--rotation', `${rotations[index]}deg`);
+    // Touch and mouse event handling
+    ['mousemove', 'touchmove'].forEach(eventType => {
+        document.addEventListener(eventType, handleMouseMove, { passive: true });
+    });
+
+    // Letter animations
+    const toggleLetter = (show) => {
+        overlay.classList.toggle('active', show);
+        loveLetter.classList.toggle('active', show);
+        document.body.style.overflow = show ? 'hidden' : '';
+        heart.style.display = show ? 'none' : 'block'; // Hide heart when letter is shown
+    };
+
+    heart.addEventListener('click', () => toggleLetter(true));
+    closeButton.addEventListener('click', () => toggleLetter(false));
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) toggleLetter(false);
+    });
+
+    // Frame interaction
+    frames.forEach(frame => {
+        frame.addEventListener('click', function() {
+            const isExpanded = this.classList.contains('expanded');
             
-            frame.addEventListener('click', function() {
-                const overlay = document.getElementById('overlay');
-                if (!this.classList.contains('expanded')) {
-                    this.classList.add('expanded');
-                    overlay.classList.add('active');
-                    this.style.animation = 'frameSpin 0.5s ease-out forwards';
-                } else {
-                    this.classList.remove('expanded');
-                    overlay.classList.remove('active');
-                    this.style.animation = '';
-                }
-            });
-        });
-
-        // Close expanded image when clicking overlay
-        document.getElementById('overlay').addEventListener('click', function() {
-            const expandedFrame = document.querySelector('.frame.expanded');
-            if (expandedFrame) {
-                expandedFrame.classList.remove('expanded');
-                expandedFrame.style.animation = '';
-                this.classList.remove('active');
+            if (!isExpanded) {
+                overlay.classList.add('active');
+                this.style.transform = 'translate(-50%, -50%) scale(2)';
+                this.style.position = 'fixed';
+                this.style.zIndex = '1000';
+                this.classList.add('expanded');
+            } else {
+                overlay.classList.remove('active');
+                this.style.transform = '';
+                this.style.position = 'absolute';
+                this.style.zIndex = '';
+                this.classList.remove('expanded');
             }
         });
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            toggleLetter(false);
+            frames.forEach(frame => {
+                frame.classList.remove('expanded');
+                frame.style.transform = '';
+                frame.style.position = 'absolute';
+                frame.style.zIndex = '';
+            });
+            overlay.classList.remove('active');
+        }
+    });
+});
     </script>
 </body>
 </html>
