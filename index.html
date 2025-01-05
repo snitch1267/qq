@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enchanted Love Letter & Memories</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital@0;1&family=Great+Vibes&display=swap');
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffeaf1 0%, #fff0f3 50%, #ffe6e9 100%);
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50C50 77.6142 27.6142 100 0 100C-27.6142 100 -50 77.6142 -50 50C-50 22.3858 -27.6142 0 0 0C27.6142 0 50 22.3858 50 50Z' fill='%23ffffff09'/%3E%3C/svg%3E");
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .photo-frames {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .frame {
+            position: absolute;
+            width: 200px;
+            height: 150px;
+            background: #fff;
+            border: 12px solid #fff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            padding: 8px;
+            transform-origin: center;
+            animation: frameFloat 6s ease-in-out infinite;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .frame::before {
+            content: '';
+            position: absolute;
+            top: -16px;
+            left: -16px;
+            right: -16px;
+            bottom: -16px;
+            border: 2px solid rgba(255, 182, 193, 0.3);
+            z-index: -1;
+        }
+
+        .frame::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.8), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .frame:nth-child(1) { top: 8%; left: 8%; animation-delay: 0s; transform: rotate(-8deg); }
+        .frame:nth-child(2) { top: 12%; right: 8%; animation-delay: 1.5s; transform: rotate(6deg); }
+        .frame:nth-child(3) { bottom: 12%; left: 12%; animation-delay: 1s; transform: rotate(-5deg); }
+        .frame:nth-child(4) { bottom: 15%; right: 12%; animation-delay: 2s; transform: rotate(7deg); }
+
+        .heart {
+            font-size: 140px;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: heartbeat 2s ease-in-out infinite;
+            text-shadow: 0 8px 16px rgba(255, 105, 180, 0.3);
+            position: relative;
+            z-index: 10;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .heart:hover {
+            transform: scale(1.3) rotate(5deg);
+            animation: none;
+        }
+
+        .love-letter {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: linear-gradient(to bottom right, #fff, #fff9f9);
+            border: none;
+            border-radius: 20px;
+            padding: 40px;
+            width: 85%;
+            max-width: 450px;
+            box-shadow: 
+                0 20px 40px rgba(255, 105, 180, 0.15),
+                0 0 0 1px rgba(255, 182, 193, 0.2);
+            opacity: 0;
+            z-index: 100;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .love-letter.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .love-letter h2 {
+            font-family: 'Great Vibes', cursive;
+            color: #ff1493;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
+        }
+
+        .love-letter p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 25px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .love-letter.active p {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .love-letter p:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+
+        .signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.8em;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 40px;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease 0.2s;
+        }
+
+        .love-letter.active .signature {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #ff69b4;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 105, 180, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.95;
+            transition: all 0.5s ease;
+            filter: brightness(1.05) contrast(0.95);
+        }
+
+        .frame:hover {
+            transform: scale(1.05) rotate(0deg) !important;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            z-index: 20;
+        }
+
+        .frame:hover img {
+            opacity: 1;
+            filter: brightness(1.1) contrast(1);
+        }
+
+        .frame.expanded {
+            position: fixed;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) scale(2) !important;
+            z-index: 1000;
+            animation: none;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        @keyframes frameFloat {
+            0%, 100% { 
+                transform: translateY(0) rotate(var(--rotation));
+            }
+            50% { 
+                transform: translateY(-20px) rotate(var(--rotation));
+            }
+        }
+
+        @keyframes frameSpin {
+            from { transform: rotate(0deg) scale(0.5); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    <div class="photo-frames">
+        <div class="frame">
+            <img src="assets\1.jpg" alt="1" />
+        </div>
+        <div class="frame">
+            <img src="assets\2.jpg" alt="2" />
+        </div>
+        <div class="frame">
+            <img src="assets\3.jpg" alt="3" />
+        </div>
+        <div class="frame">
+            <img src="assets\4.jpg" alt="4" />
+        </div>
+    </div>
+    <div class="container">
+        <div class="heart" id="heart">❤️</div>
+        <div class="love-letter" id="loveLetter">
+            <button class="close-button" id="closeButton">×</button>
+            <h2>My Sheshee,</h2>
+            <p>
+                From the moment our paths crossed, my heart has known only one truth: it beats in perfect harmony with yours. Your presence in my life is like the first light of dawn breaking through darkness, bringing warmth and color to my world.
+            </p>
+            <p>
+                Every smile you share is a treasure, every laugh a melody that echoes in my soul. In your eyes, I see not just love, but the promise of countless adventures and quiet moments we've yet to share.
+            </p>
+            <div class="signature">
+                Forever Yours,<br>
+                With All My Love ❤️
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('heart').addEventListener('click', function() {
+            const loveLetter = document.getElementById('loveLetter');
+            loveLetter.style.display = 'block';
+            requestAnimationFrame(() => {
+                loveLetter.classList.add('active');
+            });
+        });
+
+        document.getElementById('closeButton').addEventListener('click', function() {
+            const loveLetter = document.getElementById('loveLetter');
+            loveLetter.classList.remove('active');
+            setTimeout(() => {
+                loveLetter.style.display = 'none';
+            }, 500);
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            const frames = document.querySelectorAll('.frame:not(.expanded)');
+            const moveX = (e.clientX - window.innerWidth / 2) / 40;
+            const moveY = (e.clientY - window.innerHeight / 2) / 40;
+
+            frames.forEach((frame, index) => {
+                const delay = index * 0.1;
+                frame.style.transition = 'transform 0.3s ease';
+                frame.style.transform = `translate(${moveX}px, ${moveY}px) rotate(${frame.dataset.rotation || '0deg'})`;
+            });
+        });
+
+        // Initialize frame rotations and add click handlers
+        document.querySelectorAll('.frame').forEach((frame, index) => {
+            const rotations = [-8, 6, -5, 7];
+            frame.style.setProperty('--rotation', `${rotations[index]}deg`);
+            
+            frame.addEventListener('click', function() {
+                const overlay = document.getElementById('overlay');
+                if (!this.classList.contains('expanded')) {
+                    this.classList.add('expanded');
+                    overlay.classList.add('active');
+                    this.style.animation = 'frameSpin 0.5s ease-out forwards';
+                } else {
+                    this.classList.remove('expanded');
+                    overlay.classList.remove('active');
+                    this.style.animation = '';
+                }
+            });
+        });
+
+        // Close expanded image when clicking overlay
+        document.getElementById('overlay').addEventListener('click', function() {
+            const expandedFrame = document.querySelector('.frame.expanded');
+            if (expandedFrame) {
+                expandedFrame.classList.remove('expanded');
+                expandedFrame.style.animation = '';
+                this.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
